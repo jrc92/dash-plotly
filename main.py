@@ -5,21 +5,23 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
-import chart_studio.plotly as py
-import squarify
 from dash.dependencies import Input, Output
-from textwrap import dedent
 from flask import jsonify
+import os
+
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 server = Flask(__name__)
 
-external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server = server)
 
-df_emo = pd.read_csv("/home/jiarongchua92/dash-plotly/consol_all_emotions_2018.csv", header = 0, index_col = 0)
+script_dir = os.path.dirname(__file__)
+rel_path = 'consol_all_emotions_2018.csv'
+rel_to_cwd_path = os.path.join(script_dir, rel_path) 
+df_emo = pd.read_csv(rel_to_cwd_path, header = 0, index_col = 0)
 
 # assuming that both have the same number of entities/topics
 
@@ -29,7 +31,7 @@ emotions = ['love', 'happy', 'lol', 'surprised', 'sad', 'angry']
 
 app.layout = html.Div([
     html.Div([
-        html.Label("Choose an Entity"),
+        html.Label("Welcome to my Dashboard. Choose an Entity"),
         dcc.Dropdown(
             id = 'entity-selection',
             options = [{'label': i, 'value': i} for i in entities_emo],
@@ -121,5 +123,5 @@ if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
     # can be configured by adding an `entrypoint` to app.yaml.
-    app.run_server(host='127.0.0.1', port=8080, debug=True)
+    app.run_server(port=8080, debug=True)
 # [END gae_python37_app]
