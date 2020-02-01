@@ -30,7 +30,7 @@ app.layout = html.Div([
     html.H1('The Moma Collection'),
     html.Div([
         html.Div([
-            html.P("Filter by Year"),
+            html.P("Filter by Department"),
             dcc.Dropdown(
                 id='dept-selection',
                 options=[{'label': i, 'value': i} for i in moma_dept],
