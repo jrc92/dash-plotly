@@ -6,7 +6,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
-from flask import jsonify
 import os
 
 
@@ -19,105 +18,57 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server = server)
 
 script_dir = os.path.dirname(__file__)
-rel_path = 'consol_all_emotions_2018.csv'
-rel_to_cwd_path = os.path.join(script_dir, rel_path) 
-df_emo = pd.read_csv(rel_to_cwd_path, header = 0, index_col = 0)
+rel_path_1 = 'artworks.csv'
+rel_to_cwd_path_1 = os.path.join(script_dir, rel_path_1) 
+df_moma_1 = pd.read_csv(rel_to_cwd_path_1, header = 0, index_col = 0)
 
 # assuming that both have the same number of entities/topics
 
-entities_emo = df_emo["entity"].unique()
-
-emotions = ['love', 'happy', 'lol', 'surprised', 'sad', 'angry']
+moma_dept = df_moma_1["Department"].unique()
 
 app.layout = html.Div([
+    html.H1('The Moma Collection'),
     html.Div([
-        html.Label("Welcome to my Dashboard. Choose an Entity"),
-        dcc.Dropdown(
-            id = 'entity-selection',
-            options = [{'label': i, 'value': i} for i in entities_emo],
-            value = 'hsbc'
-        )
-    ]),        
-        dcc.Graph(id = 'emotion-time-bar')
-    ])
+        html.Div([
+            html.P("Filter by Year"),
+            dcc.Dropdown(
+                id='dept-selection',
+                options=[{'label': i, 'value': i} for i in moma_dept],
+                value='Architecture & Design'
+            )
+        ])
+    ]),
+        dcc.Graph(id = 'moma-dept-time-chart')
+])
 
 @app.callback(
-    Output('emotion-time-bar', 'figure'),
-    [Input('entity-selection', 'value')])
+    Output('moma-dept-time-chart', 'figure'),
+    [Input('dept-selection', 'value')])
  
-def update_emotions_time(entity_name):
-    dff_emo_pre = df_emo[df_emo['entity'] == entity_name]
-    dff_emo_pre['dates'] = pd.to_datetime(dff_emo_pre.dates)
-    emotions = ['love', 'happy', 'lol', 'surprised', 'sad', 'angry']
-    dff_emo = dff_emo_pre.groupby('dates')[emotions].sum()
+def update_dept_time(dept):
+    dff_dept_pre = df_moma_1[df_moma_1['Department'] == dept]
+    dff_dept_pre.dropna(subset = ['Acquisition Date'], inplace = True)
+    dff_dept_pre['Year'] = pd.to_datetime(dff_dept_pre['Acquisition Date']).apply(lambda x: x.year)
+    dff_dept = dff_dept_pre.groupby('Year')['Title'].count()
+    dff_dept = pd.DataFrame(dff_dept)
     return({
         'data': [
             go.Bar(
-                x = dff_emo.index, 
-                y = dff_emo["love"],
-                name = "love",
-                marker = dict(
+                x = dff_dept.index, 
+                y = dff_dept.Title,
+                name = 'count',
+                marker = dict(  
                     color = "purple"
                 )
-            ),
-            go.Bar(
-                x = dff_emo.index,
-                y = dff_emo["happy"],
-                name = "happy",
-                marker = dict(
-                    color = "orange"
-                )
-            ),
-            go.Bar(
-                x = dff_emo.index,
-                y = dff_emo["lol"],
-                name = "lol",
-                marker = dict(
-                    color = "green"
-                )
-            ),
-            go.Bar(
-                x = dff_emo.index,
-                y = dff_emo["surprised"],
-                name = "surprised",
-                marker = dict(
-                    color = "yellow"
-                )
-            ),
-            go.Bar(
-                x = dff_emo.index,
-                y = dff_emo["sad"],
-                name = "sad",
-                marker = dict(
-                    color = "blue"
-                )
-            ),
-            go.Bar(
-                x = dff_emo.index,
-                y = dff_emo["angry"],
-                name = "angry",
-                marker = dict(
-                    color = "red"
-                )
-            )
-        ],
+            )],
         'layout': go.Layout(
             barmode = 'stack',
-            title = 'News Reaction across Time for ' + str(entity_name),
+            title = 'Number of Art Pieces by Year of Creation: ' + str(dept),
             xaxis = {'title': 'dates'},
-            yaxis = {'title': 'emotion counts'}
+            yaxis = {'title': 'art pieces created'}
         )
     })
 
-@server.route('/')
-def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello! Welcome to my dashboard!'
-
-@server.route('/name/<value>')
-def name(value):
-    val = {"value": value}
-    return jsonify
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
