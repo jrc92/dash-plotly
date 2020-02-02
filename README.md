@@ -8,9 +8,7 @@
 
 ![Activate](img/CloudShell.png)
 
-3. Activate project using the following command:
-
-```gcloud config set project [PROJECT_ID]```
+3. Activate project using the following command: ```gcloud config set project [PROJECT_ID]```
 
 4. For the specific project, enable APIs for App Engine Admin and Cloud Build (which we'll need for later)
 
