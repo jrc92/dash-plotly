@@ -11,14 +11,20 @@
 
 4. For the specific project, enable APIs for App Engine Admin and Cloud Build (which we'll need for later)
 ![APISearch](img/APISearch.png)
-![APIEnable](img/APIEnable)
+![APIEnable](img/APIEnable.png)
 
 5. Create GitHub Repository and initialize a README.md and .gitignore for Python
 ![GitHubRepo](img/GitHubRepo.png)
 
-6. Next create a SSH key pair by typing the following in Cloud Shell and press 'Enter' key twice
-```ssh-keygen -t rsa```
+6. Next create a SSH key pair by typing ```ssh-keygen -t rsa``` in Cloud Shell and press 'Enter' key thrice
 
-7. Access your SSH key via the following 
+7. Access your SSH key via ```cat ~/.ssh/id_rsa.pub``` in Cloud Shell. 
 
-7. going to the profile icon on the top right, and click on Settings. Choose SSH and GPG keys
+8. On GitHub, click on the Profile icon on the top right, and choose Settings >> SSH and GPG keys. Click on 'New SSH Key', copy and paste the ssh-key from the Shell
+![SSH](img/ssh.png)
+
+9. 
+
+
+
+
