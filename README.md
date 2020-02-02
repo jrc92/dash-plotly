@@ -34,17 +34,17 @@ The contents of the files are as per the repository.
 
 11. Create app engine app: ```gcloud app create```, and choose your location
 
-11. Create a virtual machine by ```virtualenv --python $(which python) venv``` ```source venv/bin/activate```
+12. Create a virtual machine by ```virtualenv --python $(which python) venv``` ```source venv/bin/activate```
 
-12. On ```venv```, run ```make install``` on shell, which will automatically install all packages required by ```main.py```
+13. On ```venv```, run ```make install``` on shell, which will automatically install all packages required by ```main.py```
 
-13. Run our app on local machine using ```python main.py```. Access Dash via the local address provided
+14. Run our app on local machine using ```python main.py```. Access Dash via the local address provided
 ![local](img/localmach.png)
 
-14. Now let's deploy the app on GCP: ```gcloud app deploy```, and access the app on https://[PROJECT_ID].appspot.com
+15. Now let's deploy the app on GCP: ```gcloud app deploy```, and access the app on https://[PROJECT_ID].appspot.com
 ![gcpdeploy](img/gcpdeploy.png)
 
-15. Moving onto Cloud Build: First, we create a ```cloudbuild.yaml``` file containing the following:
+16. Moving onto Cloud Build: First, we create a ```cloudbuild.yaml``` file containing the following:
 ```
 steps:
 - name: "gcr.io/cloud-builders/gcloud"
@@ -52,16 +52,16 @@ steps:
 timeout: "1600s"
 ```
 
-16. Since we had enabled the API earlier, we can access the Cloud Build Dashboard for our project via the Navigational Pane in the top left
+17. Since we had enabled the API earlier, we can access the Cloud Build Dashboard for our project via the Navigational Pane in the top left
 ![clouldbuild](img/cloudbuild.png)
 
-16. Lets create a build trigger based on ```git push``` into our GitHub repository. Choose GitHub as source, and connect to the specific project repo. 
+18. Lets create a build trigger based on ```git push``` into our GitHub repository. Choose GitHub as source, and connect to the specific project repo. 
 ![push](img/push.png)
 
-17. In the Specifications, we will specify 'Branch' trigger type and Build Configuration as 'Cloud Build configuration file (yaml or json)'
+19. In the Specifications, we will specify 'Branch' trigger type and Build Configuration as 'Cloud Build configuration file'
 ![spec](img/spec.png)
 
-18. Next, we will trigger build by doing ```git add .```, ```git commit -m 'message'``` and ```git push```. Returning to the Cloud Build Dashboard, we will see the following in the 'History' tab
+20. Next, we will trigger build by doing ```git add .```, ```git commit -m 'message'``` and ```git push```. Returning to the Cloud Build Dashboard, we will see the following in the 'History' tab
 ![history](img/history.png)
 Clicking into the specific build ID shows the following:
 ![buildsuccess](img/buildsuccess.png)
