@@ -61,7 +61,11 @@ timeout: "1600s"
 17. In the Specifications, we will specify 'Branch' trigger type and Build Configuration as 'Cloud Build configuration file (yaml or json)'
 ![spec](img/spec.png)
 
-18. Next, we will trigger build by doing ```git add .```, ```git commit -m 'message'``` and ```git push```. Returning to the Cloud Build Dashboard, we will see the following in the 'History' tab:
+18. Next, we will trigger build by doing ```git add .```, ```git commit -m 'message'``` and ```git push```. Returning to the Cloud Build Dashboard, we will see the following in the 'History' tab
+![history](img/history.png)
+Clicking into the specific build ID shows the following:
+![buildsuccess](img/buildsuccess.png)
+We can similarly access the page via the target url provided.
 
 
 
